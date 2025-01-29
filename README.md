@@ -15,7 +15,7 @@ A Flutter package that provides a custom `TextField` widget with Bangla phonetic
 Add the following to your `pubspec.yaml`:
 ```yaml
 dependencies:
-    avro_phonetic_textfield: 1.0.0
+    avro_phonetic_textfield: 1.0.1
 ```
 
 Then, run:
@@ -49,7 +49,7 @@ AvroPhoneticTextField supports all properties of Flutter’s built-in TextField,
 ## How It Works
 - Type in English characters (e.g., ami → আমি).
 - Press space to trigger transliteration.
-- Use Ctrl + M to switch between Bangla and English modes.
+- Use `Ctrl + M` to switch between Bangla and English modes.
 
 ## License
 The Unlicense

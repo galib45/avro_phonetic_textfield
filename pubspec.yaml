@@ -1,6 +1,6 @@
 name: avro_phonetic_textfield
 description: "A Flutter package for Bangla phonetic typing with real-time transliteration and language mode toggle."
-version: 1.0.0
+version: 1.0.1
 homepage: "https://github.com/galib45/avro_phonetic_textfield"
 
 environment:

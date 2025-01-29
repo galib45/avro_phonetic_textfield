@@ -154,6 +154,36 @@ class _AvroPhoneticTextFieldState extends State<AvroPhoneticTextField> {
     // TODO: implement initState
     super.initState();
     _controller.addListener(() {
+      String temp = _controller.text;
+      bool textAdded = (temp.length == _total.length + 1);
+      bool textDeleted = (temp.length == _total.length - 1);
+      if (_bangla && !HardwareKeyboard.instance.isControlPressed) {
+        if (textAdded) {
+          String lastChar = temp[temp.length - 1];
+          if (lastChar == ' ') {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              setState(() {
+                _controller.text =
+                    _replaceFirstFromEnd(_total, _current, parse(_current));
+                _controller.selection = TextSelection.collapsed(
+                    offset: _controller.text.length); // Keep cursor at end
+                _current = '';
+              });
+            });
+          } else {
+            setState(() {
+              _current += lastChar;
+            });
+          }
+        }
+        if (textDeleted) {
+          setState(() {
+            _current = _current.isNotEmpty
+                ? _current.substring(0, _current.length - 1)
+                : _current;
+          });
+        }
+      }
       setState(() {
         _total = _controller.text;
       });
@@ -177,42 +207,13 @@ class _AvroPhoneticTextFieldState extends State<AvroPhoneticTextField> {
         KeyboardListener(
           focusNode: _focusNode,
           onKeyEvent: (event) {
-            if (event is KeyDownEvent) {
-              if (HardwareKeyboard.instance.isControlPressed) {
-                if (event.character == 'm') {
-                  setState(() {
-                    _bangla = !_bangla;
-                    _current = '';
-                  });
-                }
-              }
-              if (_bangla && !HardwareKeyboard.instance.isControlPressed) {
-                if (event.character != null) {
-                  if (event.character == ' ') {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {
-                        _controller.text = _replaceFirstFromEnd(
-                            _total, _current, parse(_current));
-                        _controller.selection = TextSelection.collapsed(
-                            offset:
-                                _controller.text.length); // Keep cursor at end
-                        _current = '';
-                      });
-                    });
-                  } else {
-                    setState(() {
-                      _current += event.character!;
-                    });
-                  }
-                }
-                if (event.logicalKey.keyLabel == 'Backspace') {
-                  setState(() {
-                    _current = _current.isNotEmpty
-                        ? _current.substring(0, _current.length - 1)
-                        : _current;
-                  });
-                }
-              }
+            if (event is KeyDownEvent &&
+                HardwareKeyboard.instance.isControlPressed &&
+                event.logicalKey.keyLabel == 'M') {
+              setState(() {
+                _bangla = !_bangla;
+                _current = '';
+              });
             }
           },
           child: TextField(

@@ -8,3 +8,6 @@
 - Fully customizable with all properties of Flutter's built-in `TextField` except the `controller`.
 - Added installation and usage instructions.
 
+## [1.0.1] - 2025-01-29
+- added support for on screen keyboards by changing the implementation
+- using `event.logicalKey.keyLabel` instead of `event.character`
