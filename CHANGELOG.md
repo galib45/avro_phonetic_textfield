@@ -11,3 +11,6 @@
 ## [1.0.1] - 2025-01-29
 - added support for on screen keyboards by changing the implementation
 - using `event.logicalKey.keyLabel` instead of `event.character`
+
+## [1.0.2] - 2025-01-31
+- made `controller` a required field, this fixes a bug and makes controlling even easier.

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AvroPhoneticTextField extends StatefulWidget {
+  final TextEditingController controller;
   final FocusNode? focusNode;
   final InputDecoration? decoration;
   final TextInputType? keyboardType;
@@ -76,6 +77,7 @@ class AvroPhoneticTextField extends StatefulWidget {
 
   const AvroPhoneticTextField({
     super.key,
+    required this.controller,
     this.focusNode,
     this.decoration,
     this.keyboardType,
@@ -147,14 +149,12 @@ class _AvroPhoneticTextFieldState extends State<AvroPhoneticTextField> {
   String _current = '';
   bool _bangla = true;
   final FocusNode _focusNode = FocusNode();
-  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _controller.addListener(() {
-      String temp = _controller.text;
+    widget.controller.addListener(() {
+      String temp = widget.controller.text;
       bool textAdded = (temp.length == _total.length + 1);
       bool textDeleted = (temp.length == _total.length - 1);
       if (_bangla && !HardwareKeyboard.instance.isControlPressed) {
@@ -163,10 +163,11 @@ class _AvroPhoneticTextFieldState extends State<AvroPhoneticTextField> {
           if (lastChar == ' ') {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               setState(() {
-                _controller.text =
+                String newText =
                     _replaceFirstFromEnd(_total, _current, parse(_current));
-                _controller.selection = TextSelection.collapsed(
-                    offset: _controller.text.length); // Keep cursor at end
+                widget.controller.value = TextEditingValue(
+                    text: newText,
+                    selection: TextSelection.collapsed(offset: newText.length));
                 _current = '';
               });
             });
@@ -185,16 +186,15 @@ class _AvroPhoneticTextFieldState extends State<AvroPhoneticTextField> {
         }
       }
       setState(() {
-        _total = _controller.text;
+        _total = widget.controller.text;
       });
     });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-    _controller.dispose();
+    widget.controller.dispose();
   }
 
   @override
@@ -202,8 +202,6 @@ class _AvroPhoneticTextFieldState extends State<AvroPhoneticTextField> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Text(_current.isEmpty ? '_current: (Empty)' : '_current: <$_current>'),
-        // Text(_total.isEmpty ? '_total: (Empty)' : '_total: <$_total>'),
         KeyboardListener(
           focusNode: _focusNode,
           onKeyEvent: (event) {
@@ -217,7 +215,7 @@ class _AvroPhoneticTextFieldState extends State<AvroPhoneticTextField> {
             }
           },
           child: TextField(
-            controller: _controller,
+            controller: widget.controller,
             focusNode: widget.focusNode,
             decoration: widget.decoration ?? const InputDecoration(),
             keyboardType: widget.keyboardType,

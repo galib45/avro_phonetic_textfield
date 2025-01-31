@@ -15,7 +15,7 @@ A Flutter package that provides a custom `TextField` widget with Bangla phonetic
 Add the following to your `pubspec.yaml`:
 ```yaml
 dependencies:
-    avro_phonetic_textfield: 1.0.1
+    avro_phonetic_textfield: 1.0.2
 ```
 
 Then, run:
@@ -43,7 +43,7 @@ AvroPhoneticTextField(
 
 ## Properties
 
-AvroPhoneticTextField supports all properties of Flutter’s built-in TextField, except `controller`, which is internally managed.
+AvroPhoneticTextField supports all properties of Flutter’s built-in TextField.
 
 
 ## How It Works
